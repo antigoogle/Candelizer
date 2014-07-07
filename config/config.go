@@ -13,10 +13,10 @@ type Config struct {
 type Market struct {
 	CandleWidthMins int
 	KeepCandleMins  int
+	Indicators      []map[string]interface{}
 }
 
 func ReadConfig() Config {
-
 	file, err := os.Open("config.json")
 	defer file.Close()
 	if err != nil {

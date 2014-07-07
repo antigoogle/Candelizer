@@ -2,11 +2,24 @@
 	"BFX": {
 		"BTCUSD": {
 			"CandleWidthMins": 5,
-			"KeepCandleMins": 60
-		},
-		"LTCBTC": {
-			"CandleWidthMins": 5,
-			"KeepCandleMins": 60
+			"KeepCandleMins": 60,
+			"Indicators": [
+				{
+					"Indicator": "ema",
+					"field": "EMA10",
+					"ema": 10
+				},
+				{
+					"Indicator": "ema",
+					"field": "EMA21",
+					"ema": 21
+				},
+				{
+					"Indicator": "bb",
+					"fields": [ "BBLower", "BBAverage", "BBHigher", "BB" ],
+					"ema": 21
+				}
+			]
 		}
 	}
 }

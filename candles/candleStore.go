@@ -6,30 +6,23 @@ import (
 	"strconv"
 )
 
-type CS struct {
-	data   []types.Candle
-	Update <-chan types.Candle
-}
-
-func (cs CS) Request() []types.Candle {
-	return cs.data
-}
-
-func CandleStore(candles types.CandleChannel, keep int) CS {
+func CandleStore(candles types.CandleChannel, keep int) types.CS {
 	ccount := keep / candles.Width
 	fmt.Printf("INIT CandleStore keep: " + strconv.Itoa(keep/(60*60)) + "h  (" + strconv.Itoa(keep/(ccount)) + "candles) " + candles.Exchange + " " + candles.Symbol + "\n")
 
 	update := make(chan types.Candle)
-	cs := CS{Update: update, data: make([]types.Candle, ccount)}
+	cs := types.CS{Update: update, Data: make([]types.Candle, ccount)}
 
 	go func() {
 		for {
 			select {
 			case candle := <-candles.Channel:
+				cs.Lock()
 				for i := 0; i < ccount-2; i++ {
-					cs.data[i+1] = cs.data[i]
+					cs.Data[i+1] = cs.Data[i]
 				}
-				cs.data[0] = candle
+				cs.Data[0] = candle
+				cs.Unlock()
 			case hotCandle := <-candles.HotChannel:
 				update <- hotCandle
 			}

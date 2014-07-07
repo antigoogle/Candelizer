@@ -5,16 +5,17 @@ import (
 	"github.com/flower1024/Candelizer/bfx"
 	"github.com/flower1024/Candelizer/candles"
 	"github.com/flower1024/Candelizer/config"
+	"github.com/flower1024/Candelizer/indicators"
 )
 
 func main() {
-	fmt.Printf("INIT Candelizer")
+	fmt.Printf("START Candelizer\n")
 	fin := make(chan bool)
 	conf := config.ReadConfig()
 
 	for symbol, market := range conf.BFX {
 		go func(s string, m config.Market) {
-			i := candles.Indicate(candles.CandleStore(candles.Candelize(bfx.Trades(s), m.CandleWidthMins*60), m.KeepCandleMins*60))
+			i := indicators.Indicate(candles.CandleStore(candles.Candelize(bfx.Trades(s), m.CandleWidthMins*60), m.KeepCandleMins*60), m.Indicators)
 
 			for {
 				candle := <-i.Update

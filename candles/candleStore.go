@@ -12,11 +12,17 @@ func CandleStore(candles types.CandleChannel, keep int) types.CS {
 
 	update := make(chan types.Candle)
 	cs := types.CS{Update: update, Data: make([]types.Candle, ccount)}
+	for i := 0; i < ccount; i++ {
+		cs.Data[i].Indicators = make(map[string]float64)
+	}
 
 	go func() {
 		for {
 			select {
 			case candle := <-candles.Channel:
+				if candle.Indicators == nil {
+					candle.Indicators = make(map[string]float64)
+				}
 				cs.Lock()
 				for i := 0; i < ccount-2; i++ {
 					cs.Data[i+1] = cs.Data[i]
@@ -24,6 +30,9 @@ func CandleStore(candles types.CandleChannel, keep int) types.CS {
 				cs.Data[0] = candle
 				cs.Unlock()
 			case hotCandle := <-candles.HotChannel:
+				if hotCandle.Indicators == nil {
+					hotCandle.Indicators = make(map[string]float64)
+				}
 				update <- hotCandle
 			}
 

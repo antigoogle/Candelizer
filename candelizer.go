@@ -19,7 +19,7 @@ func main() {
 
 			for {
 				candle := <-i.Update
-				fmt.Printf("RECV HotCandle: BFX-%s %s\n", symbol, candle)
+				fmt.Printf("RECV HotCandle: BFX-%s %s\n", symbol, candle.Indicators)
 			}
 
 		}(symbol, market)

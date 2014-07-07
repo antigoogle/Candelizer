@@ -1,0 +1,12 @@
+{
+	"BFX": {
+		"BTCUSD": {
+			"CandleWidthMins": 5,
+			"KeepCandleMins": 60
+		},
+		"LTCBTC": {
+			"CandleWidthMins": 5,
+			"KeepCandleMins": 60
+		}
+	}
+}
